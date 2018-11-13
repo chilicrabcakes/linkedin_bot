@@ -3,7 +3,7 @@ Small bot that applies to LinkedIn Easy Apply jobs for you. Not really a choosy 
 
 # What it needs to work
 - Windows (for now)
-- Chromedriver downloaded and stored in your working directory
+- Chromedriver downloaded and stored in your working directory <br>
 These can be found at: http://chromedriver.chromium.org/downloads
 - Python 3.x
 - Selenium and BeautifulSoup4 imports: <br>
