@@ -157,9 +157,13 @@ def apply(driver):
             
 #~~~~ Open and login to LinkedIn ~~~~#
             
-# Get password from desktop
-file_object = open('C:/Users/hadoop/Desktop/password.txt', 'r')
-password = file_object.read()
+# Get username, password from working directory
+file_objectu = open('username.txt', 'r')
+username = file_objectu.read()
+file_objectp = open('password.txt', 'r')
+password = file_objectp.read()
+
+# Note: Users need to have a chromedriver in their working directory
 
 # Open a chromedriver, open link and wait
 # LinkedIn links are nice - login redirects save job search filter information
@@ -174,7 +178,7 @@ driver.get(login_url)
 
 # Feed in username and password at the page
 username_elem = driver.find_element_by_id('username')
-username_elem.send_keys('ayushlall@g.ucla.edu')
+username_elem.send_keys(username)
 
 password_elem = driver.find_element_by_id('password')
 password_elem.send_keys(password)
