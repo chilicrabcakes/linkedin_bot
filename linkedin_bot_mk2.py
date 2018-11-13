@@ -255,29 +255,29 @@ driver.find_element_by_tag_name('body').send_keys(Keys.PAGE_DOWN)
 #
 #i = 0
 #j = 0
-## Right now I've put basically arbitrary loop size just so it works
-## I should fix that
-## TODO: Find a way to show that the list of jobs has ended 
-## and really find a way to iterate
-#while (j < 10):
-#    while (i < 5):
-#        # driver.execute_script('window.scrollTo(0,' + str(400 * (i + 1)) + ')')
-#             
-#        # Finds all jobs available on the (viewable) page
-#        # data-control-name: A_jobssearch_job_result_click
-#        jobs = driver.find_elements_by_css_selector('a[class="job-card-search__link-wrapper js-focusable-card ember-view"][tabindex="-1"]')
-#        
-#        # Opens all the job links in new tabs
-#        open_all_jobs_in_page(jobs, driver)
-#        
-#        # Clicks 'Easy Apply' for each of these jobs
-#        apply(driver)
-#        driver.switch_to_window(driver.window_handles[0])
-#        i += 1
-#   
-#    driver.get('https://www.linkedin.com/jobs/search/?f_E=1%2C2%2C3&f_LF=f_AL&keywords=Data%20Scientist&start=' + str(j*25))
-#    j += 1
-#    i = 0
+# Right now I've put basically arbitrary loop size just so it works
+# I should fix that
+# TODO: Find a way to show that the list of jobs has ended 
+# and really find a way to iterate
+while (j < 10):
+    while (i < 5):
+        # driver.execute_script('window.scrollTo(0,' + str(400 * (i + 1)) + ')')
+             
+        # Finds all jobs available on the (viewable) page
+        # data-control-name: A_jobssearch_job_result_click
+        jobs = driver.find_elements_by_css_selector('a[class="job-card-search__link-wrapper js-focusable-card ember-view"][tabindex="-1"]')
+        
+        # Opens all the job links in new tabs
+        open_all_jobs_in_page(jobs, driver)
+        
+        # Clicks 'Easy Apply' for each of these jobs
+        apply(driver)
+        driver.switch_to_window(driver.window_handles[0])
+        i += 1
+   
+    driver.get('https://www.linkedin.com/jobs/search/?f_E=1%2C2%2C3&f_LF=f_AL&keywords=Data%20Scientist&start=' + str(j*25))
+    j += 1
+    i = 0
 
 # Miscellaneous Notes 
 # mobile_login_href = 'https://www.linkedin.com/uas/login?session_redirect=%2Fjobs%2Fsearch%2F%3Ff_E%3D1%252C2%252C3%252C4%26f_LF%3Df_AL%26keywords%3DData%2BAnalyst%26bypassMobileRedirects%3Dfalse&emailAddress=&fromSignIn=&trk=jobs_mobile_chrome_login'
