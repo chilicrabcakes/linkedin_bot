@@ -72,6 +72,8 @@ def check_exists_by_css(css, driver):
         return False
     return True
 
+# create_flag_string: Takes in no arguments. Returns a string that can be added
+# to the url to account for search filters. 
 def create_flag_string():
     a = ''
     if INTERNSHIP: a += '%3D1'
@@ -92,11 +94,14 @@ def create_flag_string():
         else: a += '%252C6'
     return a
 
+# create_filtered_link: Takes in one argument, a link, and adds the 
+# flag string to it in order to add search filters
 # 77 characters until filter
 # 129 characters after filter
 def create_filtered_link(link):
     return link[:77] + create_flag_string() + link[-135:]
 
+# keywords: Takes in one argument, link. Adds the keywords to it.
 # 110 terms from the start of search locator to the end
 # 87 terms from the end of search locator to the end
 def keywords(link):
