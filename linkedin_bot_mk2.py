@@ -253,8 +253,8 @@ driver.find_element_by_tag_name('body').send_keys(Keys.PAGE_DOWN)
 
 # TODO: Need to find a way to really iterate through jobs
 #
-#i = 0
-#j = 0
+i = 0
+j = 0
 # Right now I've put basically arbitrary loop size just so it works
 # I should fix that
 # TODO: Find a way to show that the list of jobs has ended 
