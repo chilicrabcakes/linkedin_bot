@@ -7,7 +7,7 @@ Small bot that applies to LinkedIn Easy Apply jobs for you. Not really a choosy 
 These can be found at: http://chromedriver.chromium.org/downloads
 - Python 3.x
 - Selenium and BeautifulSoup4 imports: <br>
-If you have anaconda prompt, these can be downloaded by the commands
+If you have pip, these can be downloaded by the commands
 > pip install selenium </br>
 > pip install BeautifulSoup4
 - You must have filled out a LinkedIn easy apply application before (LinkedIn stores your answers so you don't have to fill them again or
