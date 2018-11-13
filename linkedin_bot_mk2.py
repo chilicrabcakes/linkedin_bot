@@ -14,6 +14,15 @@ Created on Sun Nov 11 02:10:21 2018
 # For now, applying to jobs only using LinkedIn's easy apply. No third-party
 # job application websites covered.
 
+# Flags for filters:
+INTERNSHIP = True
+ENTRY_LEVEL = True
+ASSOCIATE = True
+MID_SENIOR_LEVEL = True
+DIRECTOR = True
+EXECUTIVE = True
+SEARCHTERM = 'Supply Chain Analyst'
+
 
 from selenium import webdriver
 from bs4 import BeautifulSoup as bsp
@@ -60,6 +69,40 @@ def check_exists_by_css(css, driver):
     except NoSuchElementException:
         return False
     return True
+
+def create_flag_string():
+    a = ''
+    if INTERNSHIP: a += '%3D1'
+    if ENTRY_LEVEL: 
+        if a == '': a = '%3D2'
+        else: a += '%252C2'
+    if ASSOCIATE: 
+        if a == '': a = '%3D3'
+        else: a += '%252C3'
+    if MID_SENIOR_LEVEL: 
+        if a == '': a = '%3D4'
+        else: a += '%252C4'
+    if DIRECTOR: 
+        if a == '': a = '%3D5'
+        else: a += '%252C5'
+    if EXECUTIVE:
+        if a == '': a = '%3D6'
+        else: a += '%252C6'
+    return a
+
+# 77 characters until filter
+# 129 characters after filter
+def create_filtered_link(link):
+    return link[:77] + create_flag_string() + link[-135:]
+
+# 110 terms from the start of search locator to the end
+# 87 terms from the end of search locator to the end
+def keywords(link):
+    terms = SEARCHTERM.split()
+    final = '%3D' + terms[0]
+    for term in terms[1:]:
+        final += '%2B' + term
+    return link[:-110] + final + link[-87:]
 
 # open_in_new_tab_action: Takes in two arguments, the job which is the element to
 # be clicked and it's resulting link to be opened in a new tab, and the current
@@ -168,12 +211,13 @@ password = file_objectp.read()
 # Open a chromedriver, open link and wait
 # LinkedIn links are nice - login redirects save job search filter information
 # that was given in the original link
-mobile_login_href = 'https://www.linkedin.com/uas/login?session_redirect=%2Fjobs%2Fsearch%2F%3Ff_E%3D1%252C2%252C3%252C4%26f_LF%3Df_AL%26keywords%3DData%2BAnalyst%26bypassMobileRedirects%3Dfalse&emailAddress=&fromSignIn=&trk=jobs_mobile_chrome_login'
-login_url = 'https://www.linkedin.com/uas/login?session_redirect=%2Fjobs%2Fsearch%2F%3Ff_E%3D1%252C2%252C3%26f_LF%3Df_AL%26keywords%3DData%2BAnalyst%26bypassMobileRedirects%3Dfalse&emailAddress=&fromSignIn=&trk=jobs_mobile_chrome_login'
+original_url = 'https://www.linkedin.com/uas/login?session_redirect=%2Fjobs%2Fsearch%2F%3Ff_E%3D1%26f_LF%3Df_AL%26keywords%3DDinosaur%2BRecruiter%26bypassMobileRedirects%3Dfalse&emailAddress=&fromSignIn=&trk=jobs_mobile_chrome_login'
+fill_with_keywords = keywords(create_filtered_link(original_url))
+
 options = webdriver.ChromeOptions()
 options.add_argument('--start-maximized')
 driver = webdriver.Chrome(chrome_options=options)
-driver.get(login_url)
+driver.get(fill_with_keywords)
 
 
 # Feed in username and password at the page
@@ -204,36 +248,36 @@ classicview_elem.click()
 # Scrolls down by 400 px (?)
 driver.find_element_by_tag_name('body').send_keys(Keys.PAGE_DOWN)
 
-driver.get('https://www.linkedin.com/jobs/search/?f_E=1%2C2%2C3&f_LF=f_AL&keywords=Data%20Scientist&start=25')
+# driver.get('https://www.linkedin.com/jobs/search/?f_E=1%2C2%2C3&f_LF=f_AL&keywords=Data%20Scientist&start=25')
 
 
 # TODO: Need to find a way to really iterate through jobs
-
-i = 0
-j = 0
-# Right now I've put basically arbitrary loop size just so it works
-# I should fix that
-# TODO: Find a way to show that the list of jobs has ended 
-# and really find a way to iterate
-while (j < 10):
-    while (i < 5):
-        # driver.execute_script('window.scrollTo(0,' + str(400 * (i + 1)) + ')')
-             
-        # Finds all jobs available on the (viewable) page
-        # data-control-name: A_jobssearch_job_result_click
-        jobs = driver.find_elements_by_css_selector('a[class="job-card-search__link-wrapper js-focusable-card ember-view"][tabindex="-1"]')
-        
-        # Opens all the job links in new tabs
-        open_all_jobs_in_page(jobs, driver)
-        
-        # Clicks 'Easy Apply' for each of these jobs
-        apply(driver)
-        driver.switch_to_window(driver.window_handles[0])
-        i += 1
-   
-    driver.get('https://www.linkedin.com/jobs/search/?f_E=1%2C2%2C3&f_LF=f_AL&keywords=Data%20Scientist&start=' + str(j*25))
-    j += 1
-    i = 0
+#
+#i = 0
+#j = 0
+## Right now I've put basically arbitrary loop size just so it works
+## I should fix that
+## TODO: Find a way to show that the list of jobs has ended 
+## and really find a way to iterate
+#while (j < 10):
+#    while (i < 5):
+#        # driver.execute_script('window.scrollTo(0,' + str(400 * (i + 1)) + ')')
+#             
+#        # Finds all jobs available on the (viewable) page
+#        # data-control-name: A_jobssearch_job_result_click
+#        jobs = driver.find_elements_by_css_selector('a[class="job-card-search__link-wrapper js-focusable-card ember-view"][tabindex="-1"]')
+#        
+#        # Opens all the job links in new tabs
+#        open_all_jobs_in_page(jobs, driver)
+#        
+#        # Clicks 'Easy Apply' for each of these jobs
+#        apply(driver)
+#        driver.switch_to_window(driver.window_handles[0])
+#        i += 1
+#   
+#    driver.get('https://www.linkedin.com/jobs/search/?f_E=1%2C2%2C3&f_LF=f_AL&keywords=Data%20Scientist&start=' + str(j*25))
+#    j += 1
+#    i = 0
 
 # Miscellaneous Notes 
 # mobile_login_href = 'https://www.linkedin.com/uas/login?session_redirect=%2Fjobs%2Fsearch%2F%3Ff_E%3D1%252C2%252C3%252C4%26f_LF%3Df_AL%26keywords%3DData%2BAnalyst%26bypassMobileRedirects%3Dfalse&emailAddress=&fromSignIn=&trk=jobs_mobile_chrome_login'
@@ -245,3 +289,26 @@ while (j < 10):
     
 # LinkedIn's job search pages show 25 jobs at a time. To go to the next page
 # the easiest way is to go to the link with the next 25. 
+   
+# Adding filters:
+# https://www.linkedin.com/uas/login?session_redirect=%2Fjobs%2Fsearch%2F%3Ff_E%3D1%252C2%252C3%26f_LF%3Df_AL%26keywords%3DData%2BAnalyst%26bypassMobileRedirects%3Dfalse&emailAddress=&fromSignIn=&trk=jobs_mobile_chrome_login
+    
+    
+# Only Internship:
+# https://www.linkedin.com/uas/login?session_redirect=%2Fjobs%2Fsearch%2F%3Ff_E%3D1%26f_LF%3Df_AL%26keywords%3DData%2BAnalyst%26bypassMobileRedirects%3Dfalse&emailAddress=&fromSignIn=&trk=jobs_mobile_chrome_login    
+
+# Internship + Entry Level
+# https://www.linkedin.com/uas/login?session_redirect=%2Fjobs%2Fsearch%2F%3Ff_E%3D1%252C2%26f_LF%3Df_AL%26keywords%3DData%2BAnalyst%26bypassMobileRedirects%3Dfalse&emailAddress=&fromSignIn=&trk=jobs_mobile_chrome_login
+
+# NOFILTER
+# LinkedIn actually gives you a page with no jobs gg
+# https://www.linkedin.com/uas/login?session_redirect=%2Fjobs%2Fsearch%2F%3Ff_E%26f_LF%3Df_AL%26keywords%3DData%2BAnalyst%26bypassMobileRedirects%3Dfalse&emailAddress=&fromSignIn=&trk=jobs_mobile_chrome_login
+
+# 77 characters until filter
+# 129 characters after filter
+# https://www.linkedin.com/uas/login?session_redirect=%2Fjobs%2Fsearch%2F%3Ff_E%3D4%252C3%26f_LF%3Df_AL%26keywords%3DDataAnalyst%26bypassMobileRedirects%3Dfalse&emailAddress=&fromSignIn=&trk=jobs_mobile_chrome_login
+    
+# Search terms
+# 101 terms from the start of search locator to the end
+# 87 terms from the end of search locator to the end
+# %3D before the first word, %2B for each word after that
