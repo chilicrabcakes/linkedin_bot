@@ -21,7 +21,9 @@ ASSOCIATE = True
 MID_SENIOR_LEVEL = True
 DIRECTOR = True
 EXECUTIVE = True
-SEARCHTERM = 'Supply Chain Analyst'
+SEARCHTERM = 'Dinosaur Recruiter'
+
+SLEEP = 5
 
 
 from selenium import webdriver
@@ -137,7 +139,7 @@ def open_all_jobs_in_page(jobs, driver):
     i = 0
     joblength = len(jobs)
     while (i < joblength):
-        time.sleep(2)
+        time.sleep(SLEEP)
         try:
             open_in_new_tab(jobs[i])
         except:
@@ -179,7 +181,7 @@ def apply(driver):
                 driver.execute_script('window.scrollTo(0, 500)')
                 next_button = driver.find_element_by_css_selector('button[class="continue-btn"]')
                 next_button.click()
-                time.sleep(2)
+                time.sleep(SLEEP)
                 driver.close()
             except:
                 print('cannot click submit - new page')
@@ -189,7 +191,7 @@ def apply(driver):
         else:
             next_button = driver.find_element_by_css_selector('button[type="submit"]')
             next_button.click()
-            time.sleep(2)
+            time.sleep(SLEEP)
             driver.close()
 
 
