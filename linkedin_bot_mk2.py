@@ -18,12 +18,14 @@ Created on Sun Nov 11 02:10:21 2018
 INTERNSHIP = True
 ENTRY_LEVEL = True
 ASSOCIATE = True
-MID_SENIOR_LEVEL = True
-DIRECTOR = True
-EXECUTIVE = True
-SEARCHTERM = 'Dinosaur Recruiter'
+MID_SENIOR_LEVEL = False
+DIRECTOR = False
+EXECUTIVE = False
+SEARCHTERM = 'Software Developer'
 
-SLEEP = 5
+# Flags for program run:
+SLEEP = 3
+MAX_PAGE_LIMIT = 100
 
 
 from selenium import webdriver
@@ -130,6 +132,17 @@ def open_in_new_tab_action(job, driver):
 # this may return a 'cannot focus element' execption.
 def open_in_new_tab(job):
     job.send_keys(Keys.CONTROL + Keys.RETURN)
+    
+# scroll_to_bottom: Takes in one required argument the current WebDriver driver. 
+# Scrolls(manually) to the bottom of the page. Takes in another (bookkeeping)
+# argument that controls how far (in multiples of 200px) we need to scroll to.
+# Depth is normally set to 22 as 4200 px / 20 = 21 
+def scroll_to_bottom(driver, depth = 22):
+    k = 0
+    while k < depth:
+        driver.execute_script('window.scrollTo(0,' + str(200 * k) + ')')
+        k += 1
+
 
 ###############################################################################
 #~~~~ Worker Functions* ~~~~#
@@ -208,6 +221,8 @@ def apply(driver):
 #~~~~ Open and login to LinkedIn ~~~~#
             
 # Get username, password from working directory
+# Note: Users can either put username.txt and password.txt files in their 
+# working directory or just plug them here.
 file_objectu = open('username.txt', 'r')
 username = file_objectu.read()
 file_objectp = open('password.txt', 'r')
@@ -252,40 +267,34 @@ classicview_elem.click()
 
 #~~~~ Start Applying! ~~~~#
 
-# Scrolls down by 400 px (?)
-driver.find_element_by_tag_name('body').send_keys(Keys.PAGE_DOWN)
 
-# driver.get('https://www.linkedin.com/jobs/search/?f_E=1%2C2%2C3&f_LF=f_AL&keywords=Data%20Scientist&start=25')
-
-
-# TODO: Need to find a way to really iterate through jobs
-#
-i = 0
+# I'm putting a maximum upper limit of 100 pages of jobs 
+# just in case, the user can change if needed
 j = 0
-# Right now I've put basically arbitrary loop size just so it works
-# I should fix that
-# TODO: Find a way to show that the list of jobs has ended 
-# and really find a way to iterate
-while (j < 10):
-    while (i < 5):
-        # driver.execute_script('window.scrollTo(0,' + str(400 * (i + 1)) + ')')
-             
-        # Finds all jobs available on the (viewable) page
-        # data-control-name: A_jobssearch_job_result_click
-        jobs = driver.find_elements_by_css_selector('a[class="job-card-search__link-wrapper js-focusable-card ember-view"][tabindex="-1"]')
-        
-        # Opens all the job links in new tabs
-        open_all_jobs_in_page(jobs, driver)
-        
-        # Clicks 'Easy Apply' for each of these jobs
-        apply(driver)
-        driver.switch_to_window(driver.window_handles[0])
-        i += 1
-   
-    driver.get('https://www.linkedin.com/jobs/search/?f_E=1%2C2%2C3&f_LF=f_AL&keywords=Data%20Scientist&start=' + str(j*25))
-    j += 1
-    i = 0
+while (j < MAX_PAGE_LIMIT):
+    
+    scroll_to_bottom(driver)
+    
+    # Finds all clickable jobs on the page
+    jobs = driver.find_elements_by_css_selector('a[class="job-card-search__link-wrapper js-focusable-card ember-view"][tabindex="-1"]')
 
+    # Opens all the job links in new tabs
+    open_all_jobs_in_page(jobs, driver)
+    
+    # Clicks 'Easy Apply' for each of these jobs
+    apply(driver)
+    driver.switch_to_window(driver.window_handles[0])
+    time.sleep(SLEEP)
+    try:
+        next_page = driver.find_element_by_css_selector('button[class="next"]')
+    except NoSuchElementException:
+        break
+
+    next_page.click()
+    #driver.get('https://www.linkedin.com/jobs/search/?f_E=1%2C2%2C3&f_LF=f_AL&keywords=Data%20Scientist&start=' + str(j*25))
+    j += 1
+
+print('Done')
 # Miscellaneous Notes 
 # mobile_login_href = 'https://www.linkedin.com/uas/login?session_redirect=%2Fjobs%2Fsearch%2F%3Ff_E%3D1%252C2%252C3%252C4%26f_LF%3Df_AL%26keywords%3DData%2BAnalyst%26bypassMobileRedirects%3Dfalse&emailAddress=&fromSignIn=&trk=jobs_mobile_chrome_login'
 
@@ -293,6 +302,12 @@ while (j < 10):
 # Selenium does not store tabs in order of the way they appear on Chrome. It
 # stores them in a LIFO stack - thus the oldest tab is tab[0] and the newest 
 # one is tab[n-1] where the stack is of size n.
+    
+# Selenium gets page elements by what it can see! That is, all the elements
+# on your screen are what it'll fetch and search through. However, it stores 
+# elements that were seen previously but are now unavailable because we scrolled
+# down. This is why I went for the manual scroll instead of just going to the
+# bottom of the page instantly.
     
 # LinkedIn's job search pages show 25 jobs at a time. To go to the next page
 # the easiest way is to go to the link with the next 25. 
