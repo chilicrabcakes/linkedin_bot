@@ -13,6 +13,8 @@ If you have pip, these can be downloaded by the commands
 - You must have filled out a LinkedIn easy apply application before (LinkedIn stores your answers so you don't have to fill them again or
 think about them again)
 
+- Username and Password stored in text files named username.txt and password.txt respectively - or you could add them yourself in the code
+
 # (Possible) Bugs:
 - Does NOT have functionality to apply through third-party application websites (i.e., anything not easy apply)
 - Does NOT have functionality to selectively choose jobs (apart from LinkedIn's own filters)
