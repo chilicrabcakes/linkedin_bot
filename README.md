@@ -1,4 +1,4 @@
-# linkedin_apply
+# linkedin_bot
 Small bot that applies to LinkedIn Easy Apply jobs for you. Not really a choosy picker, will pretty much apply to anything it can get it's hands on (which is honestly what I'm doing in this job market).
 
 # What it needs to work
@@ -22,4 +22,3 @@ think about them again)
 
 Thank you! <br>
 For comments, compliments, or constructive criticism please email ayushlall@g.ucla.edu
-# linkedin_bot
