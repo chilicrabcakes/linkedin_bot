@@ -21,9 +21,11 @@ ASSOCIATE = True
 MID_SENIOR_LEVEL = False
 DIRECTOR = False
 EXECUTIVE = False
-SEARCHTERM = 'Software Developer'
+SEARCHTERM = 'Data Analyst'
 
 # Flags for program run:
+# Amount of time program sleeps after each job execution (this is needed so
+# that LinkedIn doesn't identify you as a bot and lock you out)
 SLEEP = 3
 MAX_PAGE_LIMIT = 100
 
