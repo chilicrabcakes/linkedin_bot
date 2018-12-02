@@ -16,8 +16,6 @@ think about them again)
 # (Possible) Bugs:
 - Does NOT have functionality to apply through third-party application websites (i.e., anything not easy apply)
 - Does NOT have functionality to selectively choose jobs (apart from LinkedIn's own filters)
-- Does this weird thing where it opens first 0 to k jobs on the page, then 0 to m jobs (k > m), then
- 0 to n jobs (n > m) until the loop ends (the end of the loop is an arbitrary counter for now)
 - Breaks if something unexpected happens (eg. a job that does not have the preset questions even for linkedIn easy apply)
 
 Thank you! <br>
